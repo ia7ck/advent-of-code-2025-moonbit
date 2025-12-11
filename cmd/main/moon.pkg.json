@@ -1,0 +1,9 @@
+{
+  "is-main": true,
+  "import": [
+    {
+      "path": "ia7ck/advent_of_code_2025_moonbit",
+      "alias": "lib"
+    }
+  ]
+}
