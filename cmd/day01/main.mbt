@@ -19,7 +19,7 @@ enum Direction {
 
 ///|
 fn parse(input : String) -> Array[Rotation] {
-  input.split("\n").map(parseLine).to_array()
+  input.trim_space().split("\n").map(parseLine).to_array()
 }
 
 ///|
@@ -113,7 +113,7 @@ test "test_part1" {
     "cmd/day01/output/small/part1.txt",
   )
   let actual = input |> parse |> part1
-  assert_eq(actual.to_string(), expected)
+  assert_eq(actual.to_string()[:], expected.trim_space().trim_space())
 }
 
 ///|
@@ -123,5 +123,5 @@ test "test_part2" {
     "cmd/day01/output/small/part2.txt",
   )
   let actual = input |> parse |> part2
-  assert_eq(actual.to_string(), expected)
+  assert_eq(actual.to_string()[:], expected.trim_space())
 }
