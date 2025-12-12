@@ -13,11 +13,11 @@ struct Range {
 
 ///|
 fn parse(input : String) -> Array[Range] {
-  input.trim_space().split(",").map(parseRange).to_array()
+  input.trim_space().split(",").map(parse_range).to_array()
 }
 
 ///|
-fn parseRange(input : StringView) -> Range {
+fn parse_range(input : StringView) -> Range {
   let parts = input.split("-").to_array()
   {
     start: try! @strconv.parse_int64(parts[0]),
@@ -30,12 +30,12 @@ fn part1(ranges : Array[Range]) -> Int64 {
   ranges
   .iter()
   .flat_map(range => Int64::until(range.start, range.end, inclusive=true))
-  .filter(isInvalidPart1)
+  .filter(is_invalid_part1)
   .fold(init=0L, (acc, id) => acc + id)
 }
 
 ///|
-fn isInvalidPart1(id : Int64) -> Bool {
+fn is_invalid_part1(id : Int64) -> Bool {
   let id = id.to_string()
   let len = id.length()
   try! (id[:len / 2] == id[len / 2:])
@@ -46,12 +46,12 @@ fn part2(ranges : Array[Range]) -> Int64 {
   ranges
   .iter()
   .flat_map(range => Int64::until(range.start, range.end, inclusive=true))
-  .filter(isInvalidPart2)
+  .filter(is_invalid_part2)
   .fold(init=0L, (acc, id) => acc + id)
 }
 
 ///|
-fn isInvalidPart2(id : Int64) -> Bool {
+fn is_invalid_part2(id : Int64) -> Bool {
   let id = id.to_string()
   let len = id.length()
   Int::until(1, len)
@@ -71,9 +71,9 @@ test "test_parse" {
 }
 
 ///|
-test "test_isInvalidPart1" {
-  assert_true(isInvalidPart1(123123))
-  assert_false(isInvalidPart1(123456))
+test "test_is_invalid_part1" {
+  assert_true(is_invalid_part1(123123))
+  assert_false(is_invalid_part1(123456))
 }
 
 ///|
@@ -87,10 +87,10 @@ test "test_part1" {
 }
 
 ///|
-test "test_isInvalidPart2" {
-  assert_true(isInvalidPart2(123123))
-  assert_false(isInvalidPart2(123456))
-  assert_true(isInvalidPart2(123123123))
+test "test_is_invalid_part2" {
+  assert_true(is_invalid_part2(123123))
+  assert_false(is_invalid_part2(123456))
+  assert_true(is_invalid_part2(123123123))
 }
 
 ///|

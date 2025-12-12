@@ -19,11 +19,11 @@ enum Direction {
 
 ///|
 fn parse(input : String) -> Array[Rotation] {
-  input.trim_space().split("\n").map(parseLine).to_array()
+  input.trim_space().split("\n").map(parse_line).to_array()
 }
 
 ///|
-fn parseLine(line : StringView) -> Rotation {
+fn parse_line(line : StringView) -> Rotation {
   match line.strip_prefix("L") {
     Some(rest) =>
       return {
