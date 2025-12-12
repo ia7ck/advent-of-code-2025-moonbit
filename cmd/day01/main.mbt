@@ -2,7 +2,7 @@
 fn main {
   let input = try! @fs.read_file_to_string("cmd/day01/input/large.txt")
   println("Part 1: \{input |> parse |> part1}")
-  println("Part 1: \{input |> parse |> part2}")
+  println("Part 2: \{input |> parse |> part2}")
 }
 
 ///|
