@@ -61,12 +61,11 @@ fn part2(grid : Array[Array[Char]]) -> UInt {
   for {
     let { new_grid, removed } = remove_rolls_of_paper(grid)
     if removed == 0 {
-      break
+      break total_removed
     }
     grid = new_grid
     total_removed += removed
   }
-  total_removed
 }
 
 ///|

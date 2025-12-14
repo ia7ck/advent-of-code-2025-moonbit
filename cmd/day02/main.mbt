@@ -54,7 +54,7 @@ fn part2(ranges : Array[Range]) -> Int64 {
 fn is_invalid_part2(id : Int64) -> Bool {
   let id = id.to_string()
   let len = id.length()
-  Int::until(1, len)
+  (1).until(len)
   .filter(l => len % l == 0)
   .any(l => {
     let pattern = try! id[:l]

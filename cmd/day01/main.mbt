@@ -24,21 +24,11 @@ fn parse(input : String) -> Array[Rotation] {
 
 ///|
 fn parse_line(line : StringView) -> Rotation {
-  match line.strip_prefix("L") {
-    Some(rest) =>
-      return {
-        direction: Direction::L,
-        amount: try! @strconv.parse_int64(rest),
-      }
-    None => ignore(())
+  if line.strip_prefix("L") is Some(rest) {
+    return { direction: Direction::L, amount: try! @strconv.parse_int64(rest) }
   }
-  match line.strip_prefix("R") {
-    Some(rest) =>
-      return {
-        direction: Direction::R,
-        amount: try! @strconv.parse_int64(rest),
-      }
-    None => ignore(())
+  if line.strip_prefix("R") is Some(rest) {
+    return { direction: Direction::R, amount: try! @strconv.parse_int64(rest) }
   }
   abort("unimplemented")
 }
