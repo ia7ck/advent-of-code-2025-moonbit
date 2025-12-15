@@ -63,12 +63,12 @@ fn part1(rotations : Array[Rotation]) -> Int64 {
     acc,
     rot,
   ) => {
-    let newPosition = match rot.direction {
+    let new_position = match rot.direction {
       Direction::L => acc.position - rot.amount
       Direction::R => acc.position + rot.amount
     }
-    let new_hit = acc.hit + (if newPosition.is_zero() { 1 } else { 0 })
-    { hit: new_hit, position: newPosition }
+    let new_hit = acc.hit + (if new_position.is_zero() { 1 } else { 0 })
+    { hit: new_hit, position: new_position }
   })
   acc.hit
 }
