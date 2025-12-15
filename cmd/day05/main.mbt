@@ -15,7 +15,7 @@ struct Input {
 struct Range {
   start : UInt64
   end : UInt64
-}
+} derive(Show, Eq)
 
 ///|
 fn parse(input : String) -> Input {
@@ -83,19 +83,18 @@ fn Range::merge(self : Range, other : Range) -> Range? {
 
 ///|
 fn part2(input : Input) -> UInt64 {
-  let mut ranges = []
-  for r in input.fresh_id_ranges {
+  let ranges = input.fresh_id_ranges.fold(init=[], (acc, r) => {
     let mut r = r
-    let new_ranges = []
-    for rr in ranges {
-      match r.merge(rr) {
+    let new_acc = Array::new()
+    for other in acc {
+      match r.merge(other) {
         Some(m) => r = m
-        None => new_ranges.push(rr)
+        None => new_acc.push(other)
       }
     }
-    new_ranges.push(r)
-    ranges = new_ranges
-  }
+    new_acc.push(r)
+    new_acc
+  })
   ranges.fold(init=0, (acc, r) => acc + (r.end - r.start + 1))
 }
 
@@ -107,6 +106,27 @@ test "test_part1" {
   )
   let actual = input |> parse |> part1
   assert_eq(actual.to_string()[:], expected.trim_space())
+}
+
+///|
+test "test_merge" {
+  // intersect
+  inspect(
+    Range::{ start: 0, end: 10 }.merge({ start: 5, end: 15 }),
+    content="Some({start: 0, end: 15})",
+  )
+
+  // contains
+  inspect(
+    Range::{ start: 0, end: 10 }.merge({ start: 5, end: 8 }),
+    content="Some({start: 0, end: 10})",
+  )
+
+  // disjoint
+  inspect(
+    Range::{ start: 0, end: 10 }.merge({ start: 15, end: 20 }),
+    content="None",
+  )
 }
 
 ///|
