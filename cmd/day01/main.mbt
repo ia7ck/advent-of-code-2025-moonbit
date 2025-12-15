@@ -78,21 +78,16 @@ fn part2(rotations : Array[Rotation]) -> Int64 {
   let acc = rotations.fold(init=State::{ hit: 0, position: ModInt(50) }, (
     acc,
     rot,
-  ) => {
-    let mut hit = acc.hit
-    let mut position = acc.position
-    for i in 0L..<rot.amount {
-      let p = match rot.direction {
-        Direction::L => position - 1L
-        Direction::R => position + 1L
+  ) => 0L
+    .until(rot.amount)
+    .fold(init=acc, (acc, _) => {
+      let new_position = match rot.direction {
+        Direction::L => acc.position - 1
+        Direction::R => acc.position + 1
       }
-      if p.is_zero() {
-        hit += 1
-      }
-      position = p
-    }
-    { hit, position }
-  })
+      let new_hit = acc.hit + (if new_position.is_zero() { 1 } else { 0 })
+      { hit: new_hit, position: new_position }
+    }))
   acc.hit
 }
 
