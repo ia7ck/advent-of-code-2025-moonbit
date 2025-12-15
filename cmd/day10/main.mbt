@@ -134,6 +134,72 @@ fn find_fewest_presses(
 }
 
 ///|
+fn part2_heuristic(machines : Array[Machine]) -> Int {
+  machines
+  .map(m => _part2_heuristic(m.buttons, m.joltage).unwrap())
+  .fold(init=0, (acc, x) => acc + x)
+}
+
+///|
+fn _part2_heuristic(buttons : Array[Array[Int]], joltage : Array[Int]) -> Int? {
+  if joltage.iter().all(x => x == 0) {
+    return Some(0)
+  }
+  match
+    cartesian_product((0).until(joltage.length()), (0).until(joltage.length()))
+    .filter(p => joltage[p.0] < joltage[p.1])
+    .map(p => buttons.filter(b => !b.contains(p.0) && b.contains(p.1)))
+    .min_by(b => b.length()) {
+    Some([]) =>
+      // どのボタンを押しても p.0, p.1 の差が縮まらないので打ち切り
+      None
+    Some([b]) =>
+      // p.0 を変えず p.1 を減らすボタンはこれしかないので必ず使う
+      decrease_joltage(joltage, b)
+      |> Option::bind(new_joltage => _part2_heuristic(buttons, new_joltage))
+      |> Option::map(x => x + 1)
+    _ =>
+      // 全パターンを試す
+      buttons.fold(init=None, (acc, b) => {
+        let sub = decrease_joltage(joltage, b)
+          |> Option::bind(new_joltage => _part2_heuristic(buttons, new_joltage))
+          |> Option::map(x => x + 1)
+        match (acc, sub) {
+          (None, sub) => sub
+          (acc, None) => acc
+          (Some(acc), Some(sub)) => Some(acc.min(sub))
+        }
+      })
+  }
+}
+
+///|
+fn decrease_joltage(joltage : Array[Int], button : Array[Int]) -> Array[Int]? {
+  let new_joltage = joltage.copy()
+  for j in button {
+    new_joltage[j] -= 1
+  }
+  if new_joltage.iter().all(x => x >= 0) {
+    Some(new_joltage)
+  } else {
+    None
+  }
+}
+
+///|
+fn[A, B] cartesian_product(i : Iter[A], j : Iter[B]) -> Iter[(A, B)] {
+  i.flat_map(a => j.map(b => (a, b)))
+}
+
+///|
+fn[A, B : Compare] Iter::min_by(self : Iter[A], f : (A) -> B) -> A? {
+  self.fold(init=None, (acc, a) => match acc {
+    None => Some(a)
+    Some(acc) => Some(@cmp.minimum_by_key(acc, a, f))
+  })
+}
+
+///|
 test "test_parse" {
   let input = "[#.#.] (0,1) (1) (1,2,3) {10,30,20,20}"
   assert_eq(parse(input), [
@@ -156,11 +222,41 @@ test "test_part1" {
 }
 
 ///|
+test "test_combinations" {
+  assert_eq(cartesian_product([1, 2, 3].iter(), [4, 5].iter()).to_array(), [
+    (1, 4),
+    (1, 5),
+    (2, 4),
+    (2, 5),
+    (3, 4),
+    (3, 5),
+  ])
+}
+
+///|
+test "test_min_by" {
+  assert_eq(
+    ["aaa", "bbb", "c", "dddd"].iter().min_by(s => s.length()),
+    Some("c"),
+  )
+}
+
+///|
 test "test_part2" {
   let input = try! @fs.read_file_to_string("cmd/day10/input/small.txt")
   let expected = try! @fs.read_file_to_string(
     "cmd/day10/output/small/part2.txt",
   )
   let actual = input |> parse |> part2
+  assert_eq(actual.to_string()[:], expected.trim_space())
+}
+
+///|
+test "test_part2_heuristic" {
+  let input = try! @fs.read_file_to_string("cmd/day10/input/small.txt")
+  let expected = try! @fs.read_file_to_string(
+    "cmd/day10/output/small/part2.txt",
+  )
+  let actual = input |> parse |> part2_heuristic
   assert_eq(actual.to_string()[:], expected.trim_space())
 }
