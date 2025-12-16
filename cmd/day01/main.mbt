@@ -75,20 +75,13 @@ fn part1(rotations : Array[Rotation]) -> Int64 {
 
 ///|
 fn part2(rotations : Array[Rotation]) -> Int64 {
-  let acc = rotations.fold(init=State::{ hit: 0, position: ModInt(50) }, (
-    acc,
-    rot,
-  ) => 0L
+  rotations
+  |> Array::iter()
+  |> Iter::flat_map(rot => 0L
     .until(rot.amount)
-    .fold(init=acc, (acc, _) => {
-      let new_position = match rot.direction {
-        Direction::L => acc.position - 1
-        Direction::R => acc.position + 1
-      }
-      let new_hit = acc.hit + (if new_position.is_zero() { 1 } else { 0 })
-      { hit: new_hit, position: new_position }
-    }))
-  acc.hit
+    .map(_ => Rotation::{ direction: rot.direction, amount: 1 }))
+  |> Iter::to_array()
+  |> part1
 }
 
 ///|
