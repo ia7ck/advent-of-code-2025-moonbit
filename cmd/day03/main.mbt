@@ -3,6 +3,7 @@ fn main {
   let input = try! @fs.read_file_to_string("cmd/day03/input/large.txt")
   println("Part 1: \{input |> parse |> part1}")
   println("Part 2: \{input |> parse |> part2}")
+  println("Part 2: \{input |> parse |> part2_greedy}")
 }
 
 ///|
@@ -66,6 +67,31 @@ fn part2(banks : Array[Array[UInt64]]) -> UInt64 {
 }
 
 ///|
+fn part2_greedy(banks : Array[Array[UInt64]]) -> UInt64 {
+  banks
+  .map(b => {
+    let largest_joltage = Array::new()
+    let mut i = 0
+    while largest_joltage.length() < 12 {
+      // UInt64 には .until() がない
+      let new_i = [9UL, 8, 7, 6, 5, 4, 3, 2, 1]
+        .iter()
+        .filter_map(d => {
+          let b = b[i:].to_array()
+          b.search(d).map(p => i + p)
+        })
+        .filter(new_i => largest_joltage.length() + (b.length() - new_i) >= 12)
+        .head()
+        .unwrap()
+      largest_joltage.push(b[new_i])
+      i = new_i + 1
+    }
+    try! @strconv.parse_uint64(largest_joltage.map(j => j.to_string()).join(""))
+  })
+  .fold(init=0, (acc, j) => acc + j)
+}
+
+///|
 test "test_part1" {
   let input = try! @fs.read_file_to_string("cmd/day03/input/small.txt")
   let expected = try! @fs.read_file_to_string(
@@ -82,5 +108,15 @@ test "test_part2" {
     "cmd/day03/output/small/part2.txt",
   )
   let actual = input |> parse |> part2
+  assert_eq(actual.to_string()[:], expected.trim_space())
+}
+
+///|
+test "test_part2_greedy" {
+  let input = try! @fs.read_file_to_string("cmd/day03/input/small.txt")
+  let expected = try! @fs.read_file_to_string(
+    "cmd/day03/output/small/part2.txt",
+  )
+  let actual = input |> parse |> part2_greedy
   assert_eq(actual.to_string()[:], expected.trim_space())
 }
