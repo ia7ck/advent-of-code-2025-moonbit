@@ -29,7 +29,8 @@ fn UInt64::max(self : UInt64, other : UInt64) -> UInt64 {
 
 ///|
 fn part1(banks : Array[Array[UInt64]]) -> UInt64 {
-  banks.fold(init=0, (acc, b) => {
+  banks
+  .map(b => {
     let mut largest_joltage = 0UL
     for i in 0..<b.length() {
       for j in (i + 1)..<b.length() {
@@ -37,17 +38,19 @@ fn part1(banks : Array[Array[UInt64]]) -> UInt64 {
         largest_joltage = largest_joltage.max(joltage)
       }
     }
-    acc + largest_joltage
+    largest_joltage
   })
+  .fold(init=0, (acc, j) => acc + j)
 }
 
 ///|
 fn part2(banks : Array[Array[UInt64]]) -> UInt64 {
-  banks.fold(init=0, (acc, b) => {
+  banks
+  .map(b => {
     let largest_joltage = FixedArray::make(13, None)
     largest_joltage[0] = Some(0UL)
     for b in b {
-      for len = 11; len >= 0; len = len - 1 {
+      for len in (11).until(0, step=-1, inclusive=true) {
         if largest_joltage[len] is Some(joltage) {
           let new_joltage = joltage * 10 + b
           largest_joltage[len + 1] = match largest_joltage[len + 1] {
@@ -57,8 +60,9 @@ fn part2(banks : Array[Array[UInt64]]) -> UInt64 {
         }
       }
     }
-    acc + largest_joltage[12].unwrap()
+    largest_joltage[12].unwrap()
   })
+  .fold(init=0, (acc, j) => acc + j)
 }
 
 ///|
