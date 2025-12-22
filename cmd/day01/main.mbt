@@ -91,7 +91,7 @@ test "test_part1" {
     "cmd/day01/output/small/part1.txt",
   )
   let actual = input |> parse |> part1
-  assert_eq(actual.to_string()[:], expected.trim_space().trim_space())
+  assert_eq(actual.to_string()[:], expected.trim_space())
 }
 
 ///|
