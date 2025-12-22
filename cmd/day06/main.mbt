@@ -76,18 +76,13 @@ fn part2(chars : Array[Array[Char]]) -> UInt64 {
   let mut total = 0UL
   let numbers = []
   for j = m - 1; j >= 0; j = j - 1 {
-    let mut value = 0UL
-    for i in 0..<(chars.length() - 1) {
-      match chars[i].get(j) {
-        Some(c) if c.is_ascii_digit() => {
-          let d = UInt::to_uint64(Char::to_uint(c) - Char::to_uint('0'))
-          value = value * 10 + d
-        }
-        _ => ignore(())
-      }
-    }
-    if value > 0 {
-      numbers.push(value)
+    let digits = (0)
+      .until(n - 1)
+      .filter_map(i => chars[i].get(j))
+      .filter(Char::is_ascii_digit)
+    if digits.count() > 0 {
+      let v = try! @strconv.parse_uint64(String::from_iter(digits))
+      numbers.push(v)
     }
     match chars[n - 1].get(j) {
       Some('+') =>
