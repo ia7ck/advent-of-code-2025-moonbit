@@ -76,11 +76,11 @@ fn part1(rotations : Array[Rotation]) -> Int64 {
 ///|
 fn part2(rotations : Array[Rotation]) -> Int64 {
   rotations
-  |> Array::iter()
+  |> Array::iter
   |> Iter::flat_map(rot => 0L
     .until(rot.amount)
     .map(_ => Rotation::{ direction: rot.direction, amount: 1 }))
-  |> Iter::to_array()
+  |> Iter::to_array
   |> part1
 }
 
