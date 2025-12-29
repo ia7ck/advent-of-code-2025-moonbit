@@ -31,14 +31,14 @@ fn part1(devices : Array[Device]) -> Int {
   let paths = @hashmap.HashMap::new()
   paths.set("you", 1)
   for u in ord {
-    for v in graph.get(u).unwrap() {
+    for v in graph[u] {
       if paths.get(u) is Some(p_u) {
         let p_v = paths.get_or_default(v, 0)
         paths.set(v, p_v + p_u)
       }
     }
   }
-  paths.get("out").unwrap()
+  paths["out"]
 }
 
 ///|
@@ -48,7 +48,7 @@ fn part2(devices : Array[Device]) -> UInt64 {
   let paths = @hashmap.HashMap::new()
   paths.set(("svr", State::None), 1UL)
   for u in ord {
-    for v in graph.get(u).unwrap() {
+    for v in graph[u] {
       for s in [State::None, State::DAC, State::FFT, State::Both] {
         if paths.get((u, s)) is Some(p_u) {
           let s_v = s.transition(v)
@@ -58,7 +58,7 @@ fn part2(devices : Array[Device]) -> UInt64 {
       }
     }
   }
-  paths.get(("out", State::Both)).unwrap()
+  paths[("out", State::Both)]
 }
 
 ///|
@@ -103,8 +103,7 @@ fn make_graph(
   }
   for d in devices {
     for o in d.outputs {
-      // graph[d.name].push(o) だとなぜかエラーになる
-      graph.get(d.name).unwrap().push(o)
+      graph[d.name].push(o)
     }
   }
   graph
@@ -133,8 +132,7 @@ fn topological_sort(
     ord.push(u)
     guard graph.get(u) is Some(vs) else { continue }
     for v in vs {
-      // in_degree[v] - 1
-      let new_deg = in_degree.get(v).unwrap() - 1
+      let new_deg = in_degree[v] - 1
       in_degree.set(v, new_deg)
       if new_deg == 0 {
         que.push(v)
