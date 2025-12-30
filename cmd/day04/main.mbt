@@ -7,7 +7,7 @@ fn main {
 
 ///|
 fn parse(input : String) -> Array[Array[Char]] {
-  input.trim_space().split("\n").map(line => line.iter().to_array()).to_array()
+  input.trim().split("\n").map(line => line.iter().to_array()).to_array()
 }
 
 ///|
@@ -75,7 +75,7 @@ test "test_part1" {
     "cmd/day04/output/small/part1.txt",
   )
   let actual = input |> parse |> part1
-  assert_eq(actual.to_string()[:], expected.trim_space())
+  assert_eq(actual.to_string()[:], expected.trim())
 }
 
 ///|
@@ -85,5 +85,5 @@ test "test_part2" {
     "cmd/day04/output/small/part2.txt",
   )
   let actual = input |> parse |> part2
-  assert_eq(actual.to_string()[:], expected.trim_space())
+  assert_eq(actual.to_string()[:], expected.trim())
 }

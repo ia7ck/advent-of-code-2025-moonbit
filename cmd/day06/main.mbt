@@ -19,7 +19,7 @@ enum Op {
 
 ///|
 fn parse_part1(input : String) -> InputPart1 {
-  let lines = input.trim_space().split("\n").to_array()
+  let lines = input.trim().split("\n").to_array()
   match lines {
     [.. lines, last] => {
       let numbers = lines.map(line => line
@@ -66,7 +66,7 @@ fn part1(input : InputPart1) -> UInt64 {
 
 ///|
 fn parse_part2(input : String) -> Array[Array[Char]] {
-  input.trim_space().split("\n").map(line => line.to_array()).to_array()
+  input.trim().split("\n").map(line => line.to_array()).to_array()
 }
 
 ///|
@@ -118,7 +118,7 @@ test "test_part1" {
     "cmd/day06/output/small/part1.txt",
   )
   let actual = input |> parse_part1 |> part1
-  assert_eq(actual.to_string()[:], expected.trim_space())
+  assert_eq(actual.to_string()[:], expected.trim())
 }
 
 ///|
@@ -141,5 +141,5 @@ test "test_part2" {
     "cmd/day06/output/small/part2.txt",
   )
   let actual = input |> parse_part2 |> part2
-  assert_eq(actual.to_string()[:], expected.trim_space())
+  assert_eq(actual.to_string()[:], expected.trim())
 }

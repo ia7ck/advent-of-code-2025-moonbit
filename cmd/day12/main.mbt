@@ -19,7 +19,7 @@ struct Region {
 
 ///|
 fn parse(input : String) -> Input {
-  let sections = input.trim_space().split("\n\n").to_array()
+  let sections = input.trim().split("\n\n").to_array()
   let shapes = sections[:sections.length() - 1].map(parse_present)
   let regions = sections[sections.length() - 1]
     .split("\n")

@@ -19,7 +19,7 @@ struct Range {
 
 ///|
 fn parse(input : String) -> Input {
-  let sections = input.trim_space().split("\n\n").to_array()
+  let sections = input.trim().split("\n\n").to_array()
   {
     fresh_id_ranges: parse_fresh_id_ranges(sections[0]),
     ids: parse_ids(sections[1]),
@@ -105,7 +105,7 @@ test "test_part1" {
     "cmd/day05/output/small/part1.txt",
   )
   let actual = input |> parse |> part1
-  assert_eq(actual.to_string()[:], expected.trim_space())
+  assert_eq(actual.to_string()[:], expected.trim())
 }
 
 ///|
@@ -136,5 +136,5 @@ test "test_part2" {
     "cmd/day05/output/small/part2.txt",
   )
   let actual = input |> parse |> part2
-  assert_eq(actual.to_string()[:], expected.trim_space())
+  assert_eq(actual.to_string()[:], expected.trim())
 }

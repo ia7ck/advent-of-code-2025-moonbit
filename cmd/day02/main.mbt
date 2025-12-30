@@ -13,7 +13,7 @@ struct Range {
 
 ///|
 fn parse(input : String) -> Array[Range] {
-  input.trim_space().split(",").map(parse_range).to_array()
+  input.trim().split(",").map(parse_range).to_array()
 }
 
 ///|
@@ -84,7 +84,7 @@ test "test_part1" {
     "cmd/day02/output/small/part1.txt",
   )
   let actual = input |> parse |> part1
-  assert_eq(actual.to_string()[:], expected.trim_space())
+  assert_eq(actual.to_string()[:], expected.trim())
 }
 
 ///|
@@ -101,5 +101,5 @@ test "test_part2" {
     "cmd/day02/output/small/part2.txt",
   )
   let actual = input |> parse |> part2
-  assert_eq(actual.to_string()[:], expected.trim_space())
+  assert_eq(actual.to_string()[:], expected.trim())
 }
